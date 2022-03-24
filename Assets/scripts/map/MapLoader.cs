@@ -2,9 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+struct map_properties
+{
+	public int offset;
+	public double bpm;
+}
 public class MapLoader
 {
 	Dictionary<string, List<string>> file_entrys;
+
+	private map_properties properties;
 
 	public MapLoader()
 	{
@@ -42,6 +49,35 @@ public class MapLoader
 				}
 			}
 		}
+
+		//Set bpm:
+		if(file_entrys.TryGetValue("[TimingPoints]", out entries)){ 
+			for(int i = 0; i < entries.Count; i++)
+            {
+                if (entries[i].Trim().Length != 0)
+                {
+					string[] args = entries[i].Split(',');
+					if(args.Length < 8)
+                    {
+						throw new System.Exception("Parsing BPM failed");
+                    }
+					args[1] = args[1].Replace('.', ','); // =(
+					double parsed_double;
+					bool passed = double.TryParse(args[1], out parsed_double);
+                    if (!passed)
+                    {
+						if(!double.TryParse(args[1].Replace('.', ','), out parsed_double))
+                        {
+							throw new System.Exception("PARSING BPM DOUBLE FAILED");
+                        }
+                    }
+					properties.bpm = (1000.0 / parsed_double * 60.0);
+					Debug.Log("BPM set to: " + properties.bpm);
+					break;
+                }
+            }
+		}
+
 		return notes;
 	}
 

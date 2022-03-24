@@ -78,3 +78,6 @@ crashlytics-build.properties
 *.osu.meta
 *.wav
 *.osu
+*.ogg
+*.ogg.meta
+/Assets/TextMesh pro/
