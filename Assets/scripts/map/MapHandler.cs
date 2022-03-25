@@ -1,17 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 
 
 public class MapHandler : MonoBehaviour
 {
+
+    public static string music_path;
+
+    public static string game_file_path;
 
     public static long offset = 0;
 
     public GameObject note_prefab;
 
     public Vector3 target_pos;
+
+    public GameObject april_banner;
 
     public float scroll_speed = 20.0f;
 
@@ -20,6 +26,9 @@ public class MapHandler : MonoBehaviour
     private bool has_loaded = false;
 
     private bool GOD_MODE = false;
+
+    private bool logic_gate_mode = false;
+    private float logic_gate_timer = 0;
 
     MapLoader mapLoader;
 
@@ -34,7 +43,9 @@ public class MapHandler : MonoBehaviour
         notes = new List<Pair<Note, GameObject>>();
         mapLoader = new MapLoader();
         string maps_folder_path = Application.dataPath + "/maps/";
-        List<Note> tmp_notes = mapLoader.load_map(maps_folder_path + "test1/latt.osu");
+
+        string file_path = game_file_path == null ? "test1/latt.osu" : game_file_path;
+        List <Note> tmp_notes = mapLoader.load_map(maps_folder_path + file_path);
         
         // Create gameobjects for the all notes:
         for(int i = 0; i < tmp_notes.Count; i++)
@@ -44,8 +55,10 @@ public class MapHandler : MonoBehaviour
         }
 
         //Load song from file:
+
+        file_path = music_path == null ? "test1/The Empress.mp3" : music_path;
         source = GetComponent<AudioSource>();
-        using (var www = new WWW(maps_folder_path + "test1/The Empress.mp3"))
+        using (var www = new WWW(maps_folder_path + file_path))
         {
             yield return www;
             source.clip = www.GetAudioClip();
@@ -156,6 +169,17 @@ public class MapHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (logic_gate_mode)
+        {
+            logic_gate_timer -= Time.deltaTime;
+            if (logic_gate_timer < 0)
+            {
+                Debug.Log("ENDING GATE MODE...");
+                logic_gate_mode = false;
+                GateHandler.load_next4_gates();
+            }
+        }
+        
         if (!has_loaded)
             return;
 
@@ -168,6 +192,7 @@ public class MapHandler : MonoBehaviour
         if(is_playing && !source.isPlaying)
         {
             Debug.Log("FINNISHED SONG!");
+            SceneManager.LoadScene(3);
         }
         timer = get_playback_time();
         // Instantiate gameobjects
@@ -235,6 +260,18 @@ public class MapHandler : MonoBehaviour
 
     private void remove_note_at(int i)
     {
+        //  If it is effect note, do effect: (DO ANIMATION AND SOUNDS HERE!)
+        if(!logic_gate_mode && notes[i].First.effects != 0)
+        {
+            Debug.Log("STARING GATE MODE...");
+            GateHandler.load_next4_gates();
+            logic_gate_mode = true;
+            logic_gate_timer = 10.0f; // 10 seconds
+            var go = Instantiate(april_banner);
+            gameObject.GetComponent<FadeOutWithTimer>().time_to_death = 10.0f;
+        }
+
+        // Remove note
         Destroy(notes[i].Second);
         notes.RemoveAt(i);
     }

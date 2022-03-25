@@ -9,6 +9,7 @@ struct map_properties
 }
 public class MapLoader
 {
+
 	Dictionary<string, List<string>> file_entrys;
 
 	private map_properties properties;
@@ -177,7 +178,7 @@ public class MapLoader
 	//Parse one single note from the file.
 	private Note parse_single_note(string line)
 	{
-		Note n = new Note(0, 0, Color.white);
+		Note n = new Note(0, 0, 0, Color.white);
 		//Split string
 		string[] args = line.Split(',');
         if (args.Length < 3)
@@ -186,9 +187,12 @@ public class MapLoader
         }
         else
         {
+			// NEW COMBO SPECIFIES EFFECT
+
+			int eff = (int.Parse(args[3]) >> 2) & 1;
 			//Get click time:
 			int col = Mathf.FloorToInt(int.Parse(args[0]) * Note.TOTAL_COLUMNS / 512);
-			n = new Note(long.Parse(args[2]), col, Color.white);
+			n = new Note(long.Parse(args[2]), col, eff, Color.white);
         }
 		return n;
 	}

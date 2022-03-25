@@ -13,11 +13,18 @@ public class GateHandler : MonoBehaviour
 	public static bool[] gate_outputs_clicked = new bool[4];
 	public List<Vector3> key_positions;
 	public GameObject buf, not, and, or;
-	Gate[] gates;
+	private static GameObject buf_static, not_static, and_static, or_static;
+	private static Gate[] gates;
 	bool[] inputs = new bool[2];
 	void Start()
 	{
-        if (future_gates.Count == 0)
+		buf_static	= buf;
+		not_static	= not;
+		and_static	= and;
+		or_static	= or;
+
+
+		if (future_gates.Count == 0)
         {
 			future_gates.Add(gate_type.BUF);
 			future_gates.Add(gate_type.BUF);
@@ -88,12 +95,12 @@ public class GateHandler : MonoBehaviour
 		}
 	}
 
-	public void load_next4_gates()
+	public static void load_next4_gates()
     {
 		for (int i = 0; i < 4; i++)
 			load_next_gate();
     }
-	void load_next_gate()
+	private static void load_next_gate()
     {
         if (future_gates.Count == 0)
         {
@@ -115,16 +122,16 @@ public class GateHandler : MonoBehaviour
         switch (future_gates[0])
         {
 			case gate_type.BUF:
-				go = Instantiate(buf);
+				go = Instantiate(buf_static);
 				break;
 			case gate_type.NOT:
-				go = Instantiate(not);
+				go = Instantiate(not_static);
 				break;
 			case gate_type.AND:
-				go = Instantiate(and);
+				go = Instantiate(and_static);
 				break;
 			case gate_type.OR:
-				go = Instantiate(or);
+				go = Instantiate(or_static);
 				break;
         }
 

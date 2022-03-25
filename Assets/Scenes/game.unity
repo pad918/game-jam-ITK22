@@ -540,7 +540,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.18039216, g: 0.20392157, b: 0.2509804, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -1779,6 +1779,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   note_prefab: {fileID: 2603757711802568308, guid: 95da7be3741eb3844bdeebff3c70946c, type: 3}
   target_pos: {x: 0, y: -2.5, z: 0}
+  april_banner: {fileID: 137784665947984910, guid: 9beddcaff776e6f4e82ea0cd9c540f9b, type: 3}
   scroll_speed: 60
   source: {fileID: 0}
 --- !u!4 &1536458073
