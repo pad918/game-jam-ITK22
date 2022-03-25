@@ -19,7 +19,7 @@ public class MapHandler : MonoBehaviour
 
     private bool has_loaded = false;
 
-    private bool GOD_MODE = true;
+    private bool GOD_MODE = false;
 
     MapLoader mapLoader;
 
@@ -34,7 +34,7 @@ public class MapHandler : MonoBehaviour
         notes = new List<Pair<Note, GameObject>>();
         mapLoader = new MapLoader();
         string maps_folder_path = Application.dataPath + "/maps/";
-        List<Note> tmp_notes = mapLoader.load_map(maps_folder_path + "test1/svar1.osu");
+        List<Note> tmp_notes = mapLoader.load_map(maps_folder_path + "test1/latt.osu");
         
         // Create gameobjects for the all notes:
         for(int i = 0; i < tmp_notes.Count; i++)
@@ -64,6 +64,10 @@ public class MapHandler : MonoBehaviour
 
             //Find next note in coloumn:
             int note_id = get_id_of_next_note_in_column(i);
+            if (note_id < 0)
+            {
+                return;
+            }
 
             //Get deltatime
             long note_time = notes[note_id].First.click_time;
@@ -75,7 +79,7 @@ public class MapHandler : MonoBehaviour
                 InputHandler.btns_clicked[i] = true;
             }
 
-            if (!InputHandler.btns_clicked[i])
+            if (!GateHandler.gate_outputs_clicked[i])
                 continue;
 
             if (note_id >= 0)

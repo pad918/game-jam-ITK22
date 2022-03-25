@@ -28,11 +28,12 @@ public class MapLoader
 
 		//Set map properties
 
-		//Set offset
+		
 		List<string> entries;
 		bool found = file_entrys.TryGetValue("[General]", out entries);
 		if (found) {
 
+			//Set offset
 			var tmp = parse_sub_properties(entries);
 			string prop;
 			found = tmp.TryGetValue("Offset", out prop);
@@ -48,10 +49,29 @@ public class MapLoader
 					Debug.Log("Parsing failed: " + e.Message);
 				}
 			}
+
+			//Set logic gates:
+			if (tmp.TryGetValue("Gates", out prop))
+            {
+				if (GateHandler.future_gates.Count == 0)
+				{
+					GateHandler.future_gates.Add(GateHandler.gate_type.BUF);
+					GateHandler.future_gates.Add(GateHandler.gate_type.BUF);
+					GateHandler.future_gates.Add(GateHandler.gate_type.BUF);
+					GateHandler.future_gates.Add(GateHandler.gate_type.BUF);
+				}
+				Debug.Log("STRING = " + prop);
+				string[] gate_strs = prop.Split(',');
+				for(int i = 0; i < gate_strs.Length; i++)
+                {
+					GateHandler.future_gates.Add((GateHandler.gate_type)int.Parse(gate_strs[i]));
+                }
+				Debug.Log("LOADED " + gate_strs.Length + " logic gates");
+            }
 		}
 
 		//Set bpm:
-		if(file_entrys.TryGetValue("[TimingPoints]", out entries)){ 
+		if (file_entrys.TryGetValue("[TimingPoints]", out entries)){ 
 			for(int i = 0; i < entries.Count; i++)
             {
                 if (entries[i].Trim().Length != 0)
@@ -78,6 +98,7 @@ public class MapLoader
             }
 		}
 
+		
 		return notes;
 	}
 
@@ -151,6 +172,7 @@ public class MapLoader
         }
 		return dic;
     }
+
 
 	//Parse one single note from the file.
 	private Note parse_single_note(string line)

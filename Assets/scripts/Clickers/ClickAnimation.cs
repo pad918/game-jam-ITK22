@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ClickAnimation : MonoBehaviour
 {
+    public bool is_gate_output = false;
     public int keyCode;
     public GameObject child;
     private SpriteRenderer sprite;
@@ -26,7 +27,11 @@ public class ClickAnimation : MonoBehaviour
         //{
         //    click();
         //}
-        if(InputHandler.btns_clicked[keyCode])
+        if (!is_gate_output && InputHandler.btns_down[keyCode])
+        {
+            click();
+        }
+        else if (is_gate_output && GateHandler.gate_outputs_down[keyCode])
         {
             click();
         }
@@ -47,7 +52,7 @@ public class ClickAnimation : MonoBehaviour
         is_fading = true;
         fade_timer = 1.0f;
         time_since_fade_started = 0;
-        Debug.Log("Fading!!!");
+        //Debug.Log("Fading!!!");
     }
     private void update_fade_timer()
     {
