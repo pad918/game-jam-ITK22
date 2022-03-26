@@ -10,8 +10,8 @@ public class FadeOutWithTimer : MonoBehaviour
     void Start()
     {
         sr = GetComponent<SpriteRenderer>();
-        transform.position = new Vector3(1 + Random.Range(2, 3), Random.Range(-1, 1), -1);
-        transform.eulerAngles = new Vector3(0, Random.Range(-15, 15), 0);
+        transform.position = new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), -1);
+        transform.eulerAngles = new Vector3(0, Random.Range(-30, 30), 0);
     }
 
     // Update is called once per frame
@@ -21,8 +21,8 @@ public class FadeOutWithTimer : MonoBehaviour
 
         var tmp = transform.localScale;
 
-        tmp.x = time_to_death / 10.0f;
-        tmp.y = time_to_death / 10.0f;
+        tmp.x = 6.0f * time_to_death / 10.0f;
+        tmp.y = 6.0f * time_to_death / 10.0f;
 
         transform.localScale = tmp;
 

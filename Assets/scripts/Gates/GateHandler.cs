@@ -23,7 +23,6 @@ public class GateHandler : MonoBehaviour
 		and_static	= and;
 		or_static	= or;
 
-
 		if (future_gates.Count == 0)
         {
 			future_gates.Add(gate_type.BUF);
@@ -32,6 +31,7 @@ public class GateHandler : MonoBehaviour
 			future_gates.Add(gate_type.BUF);
 		}
 		gates = new Gate[4];
+
 		//Instantiate 4 gates:
 		for(int i = 0; i < 4; i++)
         {
@@ -56,7 +56,10 @@ public class GateHandler : MonoBehaviour
 				return;
 
 			//GIZMOS DRAW:
-			Debug.DrawLine(gates[i].transform.position + gates[i].output_position, gates[i].transform.position + gates[i].output_position + new Vector3(0, 1, 0), Color.red);
+			var t = gates[i].output_line.GetComponent<LineRenderer>();
+			t.SetPosition(0, gates[i].transform.position + gates[i].output_position + new Vector3(0, 0, 10));
+			t.SetPosition(1, gates[i].transform.position + gates[i].output_position + new Vector3(0, 1, 0) + new Vector3(0, 0, 10));
+			//Debug.DrawLine(gates[i].transform.position + gates[i].output_position, gates[i].transform.position + gates[i].output_position + new Vector3(0, 1, 0), Color.red);
 
 			for (int j = 0; j < gates[i].input_positions.Count; j++)
 			{
@@ -64,11 +67,18 @@ public class GateHandler : MonoBehaviour
 				{
 					if ((j + i) <= 3)
 					{
-						Debug.DrawLine(gates[i].transform.position + gates[i].input_positions[j], key_positions[i + j], Color.red);
+						//Draw input lines:
+						var temp = gates[i].input_lines[j].GetComponent<LineRenderer>();
+						temp.SetPosition(0, gates[i].transform.position + gates[i].input_positions[j] + new Vector3(0, 0, 10));
+						temp.SetPosition(1, key_positions[i + j] + new Vector3(0, 0, 10));
+						//Debug.DrawLine(gates[i].transform.position + gates[i].input_positions[j], key_positions[i + j], Color.red);
 					}
 					else
 					{
-						Debug.DrawLine(gates[i].transform.position + gates[i].input_positions[j], key_positions[3], Color.red);
+						var temp = gates[i].input_lines[j].GetComponent<LineRenderer>();
+						temp.SetPosition(0, gates[i].transform.position + gates[i].input_positions[j] + new Vector3(0, 0, 10));
+						temp.SetPosition(1, key_positions[3] + new Vector3(0, 0, 10));
+						//Debug.DrawLine(gates[i].transform.position + gates[i].input_positions[j], key_positions[3], Color.red);
 					}
 					//Debug.Log("i = " + i + " j = " + j + " | i+j= " + (i + j) + " | key size = " + key_positions.Count);
 				}

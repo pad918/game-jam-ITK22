@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Gate : MonoBehaviour
 {
+
+    public GameObject output_line;
+
+    public GameObject[] input_lines;
+
     public int difficulty = 0;
 
     public Vector3 output_position;

@@ -40,6 +40,7 @@ public class MapHandler : MonoBehaviour
 
     // Start is called before the first frame update
     IEnumerator Start() {
+        
         notes = new List<Pair<Note, GameObject>>();
         mapLoader = new MapLoader();
         string maps_folder_path = Application.dataPath + "/maps/";
@@ -176,6 +177,9 @@ public class MapHandler : MonoBehaviour
             {
                 Debug.Log("ENDING GATE MODE...");
                 logic_gate_mode = false;
+                
+                //Reset music speed after april mode:
+                source.pitch = 1.0f;
                 GateHandler.load_next4_gates();
             }
         }
@@ -192,6 +196,8 @@ public class MapHandler : MonoBehaviour
         if(is_playing && !source.isPlaying)
         {
             Debug.Log("FINNISHED SONG!");
+            //RESET ALL STATIC VARS EXCEPT SCORE!
+            GateHandler.future_gates.Clear();
             SceneManager.LoadScene(3);
         }
         timer = get_playback_time();
@@ -265,6 +271,10 @@ public class MapHandler : MonoBehaviour
         {
             Debug.Log("STARING GATE MODE...");
             GateHandler.load_next4_gates();
+
+            //Lower music speed tp 70% during april mode:
+            source.pitch = 0.7f;
+
             logic_gate_mode = true;
             logic_gate_timer = 10.0f; // 10 seconds
             var go = Instantiate(april_banner);

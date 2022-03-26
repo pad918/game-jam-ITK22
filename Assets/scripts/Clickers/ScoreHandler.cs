@@ -19,6 +19,8 @@ public class ScoreHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        score = 0;
+        combo = 1;
         score_text = score_text_obj.GetComponent<TMPro.TMP_Text>();
         combo_text = combo_text_obj.GetComponent<TMPro.TMP_Text>();
     }
